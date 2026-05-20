@@ -1,0 +1,295 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Professional Sales Forecast Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; font-family: Inter, system-ui, sans-serif; }
+    body { margin: 0; background: #f4f7fb; color: #2c3e50; }
+    .container { padding: 25px; max-width: 1400px; margin: auto; }
+
+    /* HEADER */
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { font-size: 42px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 25px; }
+
+    /* KPI GRID */
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px; }
+    .card { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    .kpi h3 { font-size: 13px; color: #7f8c8d; margin-bottom:5px;}
+    .kpi p { font-size: 28px; font-weight: bold; display:flex; align-items:center; }
+    .blue { color: #3498db; }
+    .green { color: #27ae60; }
+    .orange { color: #f39c12; }
+    .red { color: #e74c3c; }
+
+    /* FORM */
+    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    label { font-size: 13px; color: #7f8c8d; }
+    input, select, button { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 14px; }
+    button { background: #3498db; color: white; border: none; cursor: pointer; font-weight: 600; }
+    button:hover { background: #2980b9; }
+
+    /* CHARTS */
+    .charts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 25px; }
+    .chart-card { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    canvas { height: 330px !important; }
+
+    /* CHART EXPLANATIONS */
+    .chart-explanation { margin-top: 8px; font-size: 14px; color: #34495e; line-height:1.5; }
+
+    /* RECOMMENDATIONS */
+    .recommendation { background: #ecf6ff; border-left: 5px solid #3498db; padding: 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; line-height:1.5; }
+
+    /* ADVICE SECTION */
+    .advice { background: #fff3e0; border-left: 5px solid #f39c12; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 14px; line-height:1.5; }
+
+    /* INSIGHT SUMMARY */
+    .insight { background: #e8f8f5; border-left: 5px solid #1abc9c; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 14px; line-height:1.5; }
+
+    /* PROMOTION/HOLIDAY IMPACT */
+    .impact { background: #fff0f5; border-left: 5px solid #e91e63; padding: 12px; border-radius: 10px; margin-top: 15px; font-size: 14px; line-height:1.5; }
+
+    /* RISK ALERT */
+    .risk { background: #fff8e1; border-left: 5px solid #f1c40f; padding: 12px; border-radius: 10px; margin-top: 15px; font-size: 14px; line-height:1.5; }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>📊 Professional Sales Forecast Dashboard</h1>
+    <div class="subtitle">Dynamic predictions, insights, and actionable recommendations based on your sales data</div>
+  </div>
+
+  <!-- KPI GRID -->
+  <div class="grid">
+    <div class="card kpi"><h3>Predicted Units Sold</h3><p class="blue" id="units">--</p></div>
+    <div class="card kpi"><h3>Sales Trend</h3><p class="green" id="trend">--</p></div>
+    <div class="card kpi"><h3>Promotion</h3><p class="orange" id="promo">--</p></div>
+    <div class="card kpi"><h3>Holiday</h3><p class="red" id="holiday">--</p></div>
+  </div>
+
+  <!-- PRODUCT & FEATURES -->
+  <div class="grid">
+    <div class="card">
+      <h2>Product</h2>
+      <select id="product"></select>
+    </div>
+
+    <div class="card" style="grid-column: span 3;">
+      <h2>Prediction Features</h2>
+      <div class="form-grid">
+        <div><label>Unit Price</label><input id="price" type="number" value="10"></div>
+        <div>
+          <label>Day of Week</label>
+          <select id="day">
+            <option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option>
+            <option value="3">Wednesday</option><option value="4">Thursday</option>
+            <option value="5">Friday</option><option value="6">Saturday</option>
+          </select>
+        </div>
+        <div>
+          <label>Month</label>
+          <select id="month">
+            <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option>
+            <option value="5">May</option><option value="6">June</option>
+            <option value="7">July</option><option value="8">August</option>
+            <option value="9">September</option><option value="10">October</option>
+            <option value="11">November</option><option value="12">December</option>
+          </select>
+        </div>
+        <div><label>Promotion (0/1)</label><input id="promotion" type="number" value="1"></div>
+        <div><label>Holiday (0/1)</label><input id="holidayInput" type="number" value="0"></div>
+        <div><label>Sales Yesterday </label><input id="lag1" type="number" value="20"></div>
+        <div><label>Sales 7 Days Ago </label><input id="lag7" type="number" value="18"></div>
+        <div><label>7-Day Rolling Average</label><input id="rolling7" type="number" value="19"></div>
+        <div style="grid-column: span 3;"><button onclick="predict()">Predict Sales</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="card">
+    <h2>Model Recommendations</h2>
+    <div id="recommendations"></div>
+  </div>
+
+  <!-- SALES IMPROVEMENT ADVICE -->
+  <div class="advice" id="adviceSection">
+    <strong>Sales Improvement Advice:</strong> Select a product and run the prediction to receive tailored advice here.
+  </div>
+
+  <!-- INSIGHT SUMMARY -->
+  <div class="insight" id="insightSummary">
+    <strong>Insight Summary:</strong> Summary will appear here after prediction.
+  </div>
+
+  <!-- PROMOTION/HOLIDAY IMPACT -->
+  <div class="impact" id="impactSection">
+    <strong>Promotion & Holiday Impact:</strong> Impact analysis will appear here.
+  </div>
+
+  <!-- RISK ALERTS -->
+  <div class="risk" id="riskSection">
+    <strong>Risk Alerts:</strong> Potential underperformance warnings will appear here.
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts">
+    <div class="chart-card">
+      <h2>Historical Sales vs Prediction</h2>
+      <canvas id="historyChart"></canvas>
+      <div class="chart-explanation" id="historyExplanation"></div>
+    </div>
+    <div class="chart-card">
+      <h2>Weekly Sales Trend</h2>
+      <canvas id="weeklyChart"></canvas>
+      <div class="chart-explanation" id="weeklyExplanation"></div>
+    </div>
+    <div class="chart-card">
+      <h2>Top Selling Products</h2>
+      <canvas id="topChart"></canvas>
+      <div class="chart-explanation" id="topExplanation"></div>
+    </div>
+    <div class="chart-card">
+      <h2>Promotion vs Normal Sales</h2>
+      <canvas id="pieChart"></canvas>
+      <div class="chart-explanation" id="pieExplanation"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+/* LOAD PRODUCTS WITHOUT DUPLICATES */
+async function loadProducts() {
+  const res = await fetch(`${API}/products`);
+  const data = await res.json();
+  const select = document.getElementById("product");
+  select.innerHTML = "";
+  const seen = new Set();
+  data.forEach(p => {
+    if (!seen.has(p.product_name)) {
+      seen.add(p.product_name);
+      const opt = document.createElement("option");
+      opt.value = JSON.stringify(p);
+      opt.text = p.product_name;
+      select.appendChild(opt);
+    }
+  });
+}
+loadProducts();
+
+/* CHARTS INIT */
+const historyChart = new Chart(document.getElementById("historyChart"), { type:"line", data:{ labels:["Sales 7 Days Ago","Sales Yesterday","7-Day Rolling Avg","Prediction"], datasets:[{ data:[0,0,0,0], borderColor:"#3498db", fill:true, tension:0.4 }] }});
+const weeklyChart = new Chart(document.getElementById("weeklyChart"), { type:"line", data:{ labels:["Week1","Week2","Week3","Week4"], datasets:[{data:[0,0,0,0], borderColor:"#9b59b6", fill:true, tension:0.4}] }});
+const topChart = new Chart(document.getElementById("topChart"), { type:"bar", data:{labels:["No data"], datasets:[{data:[0], backgroundColor:"#2ecc71"}]}});
+const pieChart = new Chart(document.getElementById("pieChart"), { type:"pie", data:{labels:["Promotion","Normal"], datasets:[{data:[0,0], backgroundColor:["#27ae60","#e67e22"]}]}});
+
+/* PREDICT FUNCTION */
+async function predict() {
+  const p = JSON.parse(product.value);
+  const payload = {
+    product_name: p.product_name,
+    unit_price: +price.value,
+    promotion: +promotion.value,
+    day_of_week: +day.value,
+    month: +month.value,
+    quarter: Math.floor((+month.value-1)/3)+1,
+    lag_1: +lag1.value,
+    lag_7: +lag7.value,
+    rolling_7: +rolling7.value,
+    product_encoded: p.product_encoded,
+    aisle_encoded: p.aisle_encoded,
+    is_holiday: +holidayInput.value
+  };
+
+  const data = await fetch(`${API}/predict`, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)}).then(r=>r.json());
+
+  // KPI with arrows
+  let arrow="";
+  if(data.predicted_units_sold>payload.rolling_7){ arrow="📈"; units.style.color="#27ae60"; }
+  else if(data.predicted_units_sold<payload.rolling_7){ arrow="📉"; units.style.color="#e74c3c"; }
+  else { arrow="➡️"; units.style.color="#3498db"; }
+  units.innerText = `${data.predicted_units_sold} ${arrow}`;
+
+  if(data.trend==="increasing"){ trend.innerText="Increasing 📈"; trend.style.color="#27ae60";}
+  else if(data.trend==="decreasing"){ trend.innerText="Decreasing 📉"; trend.style.color="#e74c3c";}
+  else{ trend.innerText="Stable ➡️"; trend.style.color="#3498db";}
+
+  promo.innerText = payload.promotion ? "Active" : "None";
+  holiday.innerText = payload.is_holiday ? "Yes" : "No";
+
+  // Recommendations
+  recommendations.innerHTML="";
+  data.recommendation.forEach(r=>{
+    const d=document.createElement("div");
+    d.className="recommendation";
+    d.innerText=r+" This recommendation is derived from recent trends, promotional effect, holiday impact, and model forecast.";
+    recommendations.appendChild(d);
+  });
+
+  // Historical Chart
+  const histData=[payload.lag_7,payload.lag_1,payload.rolling_7,data.predicted_units_sold];
+  historyChart.data.datasets[0].data=histData;
+  historyChart.update();
+  let histText=`Historical sales: Lag1=${payload.lag_1}, Lag7=${payload.lag_7}, 7-day rolling=${payload.rolling_7}. Predicted: ${data.predicted_units_sold}. `;
+  histText+=payload.is_holiday?"Holiday impact considered. ":"";
+  histText+=payload.promotion?"Promotion active boosting expected sales. ":"No promotion active, normal sales anticipated. ";
+  histText+=data.predicted_units_sold>payload.rolling_7?"📈 Upward trend expected.":"📉 Slight decrease or stable sales.";
+  document.getElementById("historyExplanation").innerText=histText;
+
+  // Weekly Chart
+  const weekly = await fetch(`${API}/weekly_sales/${p.product_name}`).then(r=>r.json());
+  weeklyChart.data.labels=weekly.weeks.length?weekly.weeks.map(w=>"Week "+w):["Week1","Week2","Week3","Week4"];
+  weeklyChart.data.datasets[0].data=weekly.units.length?weekly.units:[0,0,0,0];
+  weeklyChart.update();
+  const maxWeek=weekly.units.indexOf(Math.max(...weekly.units));
+  const minWeek=weekly.units.indexOf(Math.min(...weekly.units));
+  document.getElementById("weeklyExplanation").innerText=`Weekly sales variability observed. Peak: ${weeklyChart.data.labels[maxWeek]} (${weekly.units[maxWeek]} units), Lowest: ${weeklyChart.data.labels[minWeek]} (${weekly.units[minWeek]} units). This helps plan stock, promotions, and workforce allocation effectively.`;
+
+  // Top Products Chart
+  const top = await fetch(`${API}/top_products`).then(r=>r.json());
+  topChart.data.labels=top.length?top.map(x=>x.product_name):["No data"];
+  topChart.data.datasets[0].data=top.length?top.map(x=>x.units_sold):[0];
+  topChart.update();
+  document.getElementById("topExplanation").innerText=`Top-selling product: ${top[0]?.product_name??"N/A"} with ${top[0]?.units_sold??0} units. Helps prioritize promotions, marketing, and inventory allocation.`;
+
+  // Pie Chart
+  const promoRatio = await fetch(`${API}/promotion_ratio/${p.product_name}`).then(r=>r.json());
+  pieChart.data.datasets[0].data=[promoRatio.promotion,promoRatio.normal];
+  pieChart.update();
+  document.getElementById("pieExplanation").innerText=promoRatio.promotion>promoRatio.normal?
+    `Most sales (${promoRatio.promotion}) during promotions, indicating discounts strongly drive purchases.`:
+    `Most sales (${promoRatio.normal}) occur on normal days, indicating stable demand.`;
+
+  // Advice
+  const adviceSection=document.getElementById("adviceSection");
+  let adviceText="Based on predicted sales trends: ";
+  adviceText+=data.predicted_units_sold>payload.rolling_7?
+    "Increase stock and extend promotions to capitalize on upward trend.":
+    "Run targeted campaigns, bundles, or price incentives to boost sales.";
+  adviceSection.innerHTML=`<strong>Sales Improvement Advice:</strong> ${adviceText}`;
+
+  // Insight Summary
+  const trendPercent = ((data.predicted_units_sold - payload.rolling_7)/payload.rolling_7*100).toFixed(2);
+  document.getElementById("insightSummary").innerHTML=
+    `<strong>Insight Summary:</strong> Predicted sales are ${data.predicted_units_sold} units (${trendPercent}% vs 7-day average). Trend: ${data.trend}. Promotion: ${payload.promotion?"Active":"None"}. Holiday: ${payload.is_holiday?"Yes":"No"}. Recommended actions: adjust inventory, consider marketing strategies, and monitor stock levels.`;
+
+  // Promotion/Holiday Impact
+  const impactSection=document.getElementById("impactSection");
+  impactSection.innerHTML=`<strong>Promotion & Holiday Impact:</strong> ${payload.promotion?"Promotion is active, boosting sales. ":"No promotion active."}${payload.is_holiday?"Holiday effect considered, potential spike in sales.":""}`;
+
+  // Risk Alerts
+  const riskSection=document.getElementById("riskSection");
+  riskSection.innerHTML=`<strong>Risk Alerts:</strong> ${data.predicted_units_sold<payload.rolling_7?"⚠️ Sales predicted lower than recent average, consider marketing push or discount.":"✅ No immediate risk detected."}`;
+}
+</script>
+</body>
+</html>
+ 
