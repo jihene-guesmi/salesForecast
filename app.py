@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 st.set_page_config(
     page_title="Business Sales Predictive Studio",
     page_icon="📊",
-    layout="wide"  # Uses the full width of the screen for a true dashboard feel
+    layout="wide"  
 )
 
 # Premium Clean Dark UI Theme Styling
@@ -131,7 +131,6 @@ with col_input:
     forecast_btn = st.button("⚡ Generate Future Sales Projection", use_container_width=True, type="primary")
     st.markdown("</div>", unsafe_allow_html=True)
     
-    # User-Friendly Explanation Tab
     with st.expander("ℹ️ How does this AI prediction work?"):
         st.write("""
         This dashboard passes your historical business data through a deep multi-weighted linear projection model. 
@@ -149,7 +148,6 @@ def calculate_horizon_predictions(hist, roll, lag, start_day, ads, scenario, sho
     scenario_scalars = {"Normal Baseline": 1.00, "Holiday Peak Surge": 1.42, "Economic Slowdown / Downturn": 0.71}
     current_scalar = scenario_scalars[scenario]
     
-    # Blend historical elements into a balanced vector baseline
     feature_mix_base = (hist * 0.25) + (roll * 0.45) + (lag * 0.30)
     marketing_coefficient_boost = float(ads) * 0.88
     shock_scalar = 0.82 if shock else 1.00
@@ -168,15 +166,15 @@ def calculate_horizon_predictions(hist, roll, lag, start_day, ads, scenario, sho
     return forecast_timeline_curve
 
 # ==========================================
-# MAIN INTERFACE RIGHT COLUMN (LIVE METRICS & VISUALIZATIONS)
+# MAIN INTERFACE RIGHT COLUMN (LIVE INFRASTRUCTURE)
 # ==========================================
 forecast_curve = calculate_horizon_predictions(
     historical_baseline, rolling_mean_7d, seasonal_lag_30d,
     selected_day, marketing_spend, macro_scenario, competitor_shock
 )
 
-target_day_name = forecast_curve
-target_day_yield = forecast_curve
+target_day_name = forecast_curve[0][0]
+target_day_yield = forecast_curve[0][1]
 
 with col_dashboard:
     # 1. LIVE HIGHLIGHT KPI SCORECARD ROW
@@ -220,7 +218,7 @@ with col_dashboard:
         </div>
         """, unsafe_allow_html=True)
 
-    # 2. THE MAIN 7-DAY future PROJECTION CURVE
+    # 2. THE MAIN 7-DAY FUTURE PROJECTION CURVE
     st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
     days_axis = [d for d, _ in forecast_curve]
     yields_axis = [v for _, v in forecast_curve]
@@ -235,12 +233,12 @@ with col_dashboard:
         line=dict(color='#00f5ff', width=3.5),
         marker=dict(size=8, color='#007aff', line=dict(color='#fff', width=1.5)),
         fill='tozeroy',
-            fillcolor='rgba(0, 245, 255, 0.02)'
-        ))
-        
-        fig_timeline.add_trace(go.Scatter(
-            x=days_axis, y=[rolling_mean_7d]*7,
-            mode='lines',
+        fillcolor='rgba(0, 245, 255, 0.02)'
+    ))
+    
+    fig_timeline.add_trace(go.Scatter(
+        x=days_axis, y=[rolling_mean_7d]*7,
+        mode='lines',
             name='Historical Daily Average',
             line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
         ))
