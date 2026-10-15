@@ -5,323 +5,381 @@ import time
 import plotly.express as px
 import plotly.graph_objects as go
 
-# ==========================================
-# DASHBOARD PAGE CONFIGURATION & INITIALIZATION
-# ==========================================
+# ==============================================================================
+# ENTERPRISE LEVEL LEVEL CORE CONFIGURATION
+# ==============================================================================
 st.set_page_config(
-    page_title="AI Sales Intelligence Center",
-    page_icon="📊",
-    layout="wide"  # Uses full screen width for professional dashboard grid scanning
+    page_title="Nexus Predictive Sales Engine Pro",
+    page_icon="🔮",
+    layout="wide"  # Maximizes grid real-estate scanning capabilities
 )
 
-# Initialize persistent session history logs cleanly if empty
-if "history" not in st.session_state:
-    st.session_state.history = [
-        {"Time": "10:14 AM", "Input Sales ($)": 14500, "Market Strategy": "Normal Baseline", "AI Forecast ($)": 15843.50, "Operational Trend": "🟢 Growth Wave"},
-        {"Time": "11:05 AM", "Input Sales ($)": 15600, "Market Strategy": "Holiday Peak Surge", "AI Forecast ($)": 24155.80, "Operational Trend": "🔥 Peak Surge Wave"},
+# Initialize deep running state tracking arrays if absent from the container runtime
+if "telemetry_vault" not in st.session_state:
+    st.session_state.telemetry_vault = [
+        {"Timestamp": "14:22:05", "Selected Day": "Friday", "Macro Vector": "Peak Holiday Surge", "Ad Spend ($)": 5000, "Calculated Label ($)": 28435.50, "Status": "🔥 Peak Operations"},
+        {"Timestamp": "15:40:12", "Selected Day": "Monday", "Macro Vector": "Normal Baseline", "Ad Spend ($)": 1500, "Calculated Label ($)": 13920.10, "Status": "🟢 Stable Optimal"},
     ]
 
-# Premium Glassmorphic Dark UI Theme Overlays
+# Premium High-Density Glassmorphism CSS Matrix Themes
 st.markdown("""
 <style>
 @import url('https://googleapis.com');
 
-/* Main Body Canvas App Styling */
+/* Base System Application Resets */
 .stApp {
     font-family: 'Inter', sans-serif;
-    background-color: #07090e;
-    color: #f3f4f6;
+    background-color: #05070c;
+    color: #f9fafb;
 }
 
-/* Premium Glassmorphic Container Panels */
-.glass-panel {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+/* Global Glassmorphic Container Core Blocks */
+.dashboard-block {
+    background: linear-gradient(135deg, rgba(13, 17, 23, 0.7) 0%, rgba(10, 12, 18, 0.8) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: 24px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
-}
-
-/* Corporate Business KPI Scorecard UI */
-.kpi-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-    padding: 22px;
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    text-align: center;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    margin-bottom: 22px;
 }
 
-.kpi-title {
+/* Executive KPI Analytics Deck Layouts */
+.kpi-deck-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
+    padding: 22px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    text-align: left;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.kpi-card-title {
     font-size: 11px;
     text-transform: uppercase;
     color: #9ca3af;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
 }
 
-.kpi-value {
+.kpi-card-value {
     font-size: 34px;
     font-weight: 900;
-    margin-top: 6px;
+    margin-top: 8px;
     margin-bottom: 4px;
 }
 
-/* Neon Text Lighting FX */
-.text-neon-cyan { color: #00f5ff; text-shadow: 0 0 12px rgba(0,245,255,0.25); }
-.text-neon-green { color: #10b981; text-shadow: 0 0 12px rgba(16,185,129,0.25); }
-.text-neon-amber { color: #f59e0b; text-shadow: 0 0 12px rgba(245,158,11,0.25); }
+/* High-Contrast Neon Visual Lighting Classes */
+.neon-cyan { color: #00f5ff; text-shadow: 0 0 15px rgba(0,245,255,0.3); }
+.neon-emerald { color: #10b981; text-shadow: 0 0 15px rgba(16,185,129,0.3); }
+.neon-amber { color: #f59e0b; text-shadow: 0 0 15px rgba(245,158,11,0.3); }
 
-/* User Friendly Status Badges */
-.status-badge {
+/* Strategy Directive Blocks */
+.directive-container {
+    padding: 16px;
+    border-radius: 12px;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+.directive-market { background: rgba(59, 130, 246, 0.06); border-left: 4px solid #3b82f6; }
+.directive-supply { background: rgba(16, 185, 129, 0.06); border-left: 4px solid #10b981; }
+.directive-risk { background: rgba(239, 68, 68, 0.06); border-left: 4px solid #ef4444; }
+
+/* Status Chip Badges */
+.pill-badge {
     display: inline-block;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    text-align: center;
 }
-.badge-normal { background: rgba(59, 130, 246, 0.12); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25); }
-.badge-surge { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25); }
-.badge-drop { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); }
+.pill-blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+.pill-green { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+.pill-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
 </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
+# ==============================================================================
 # ALGEBRAIC MODEL MATRIX ENGINE
-# ==========================================
-def calculate_horizon_predictions(hist, roll, lag, start_day, ads, scenario, shock):
-    day_indices = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    day_weights = {"Monday": 0.92, "Tuesday": 0.96, "Wednesday": 1.02, "Thursday": 1.05, "Friday": 1.22, "Saturday": 1.28, "Sunday": 0.85}
+# ==============================================================================
+def execute_tensor_forecast_pipeline(hist_base, roll_avg, seasonal_lag, day, ads, macro, shock):
+    day_keys = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    day_coefficients = {"Monday": 0.92, "Tuesday": 0.96, "Wednesday": 1.02, "Thursday": 1.05, "Friday": 1.22, "Saturday": 1.28, "Sunday": 0.85}
+    macro_coefficients = {"Normal Baseline": 1.00, "Q4 Peak Holiday Surge": 1.42, "Market Contraction Recession": 0.71}
     
-    scenario_scalars = {"Normal Baseline": 1.00, "Holiday Peak Surge": 1.42, "Economic Slowdown / Downturn": 0.71}
-    current_scalar = scenario_scalars[scenario]
+    # 🧠 EXPLICIT WEIGHTED FEATURE ATTRIBUTION MATRIX
+    w1, w2, w3 = 0.25, 0.45, 0.30
+    aggregated_feature_mix = (float(hist_base) * w1) + (float(roll_avg) * w2) + (float(seasonal_lag) * w3)
     
-    # Mathematical linear feature matrix vector calculations
-    feature_mix_base = (float(hist) * 0.25) + (float(roll) * 0.45) + (float(lag) * 0.30)
-    marketing_coefficient_boost = float(ads) * 0.88
-    shock_scalar = 0.82 if shock else 1.00
+    marketing_return_boost = float(ads) * 0.88
+    shock_multiplier = 0.82 if shock else 1.00
+    global_macro_scalar = macro_coefficients[macro]
     
-    start_idx = day_indices.index(start_day)
-    ordered_days = day_indices[start_idx:] + day_indices[:start_idx]
+    start_idx = day_keys.index(day)
+    chronological_sequence = day_keys[start_idx:] + day_keys[:start_idx]
     
-    forecast_timeline_curve = []
-    decay_factor = 1.0
+    compiled_projection_yield = []
+    horizon_decay = 1.0
     
-    for i, day in enumerate(ordered_days):
-        # Introduce a slight decay factor across a 7-day timeline window to simulate rolling tracking horizons
-        decay_factor -= (i * 0.012)
-        day_yield = (feature_mix_base + marketing_coefficient_boost) * day_weights[day] * current_scalar * shock_scalar * decay_factor
-        forecast_timeline_curve.append((day, float(day_yield)))
+    for i, step_day in enumerate(chronological_sequence):
+        # Rolling tracking horizon structural decay simulation vector parameters
+        horizon_decay -= (i * 0.012)
+        step_label_yield = (aggregated_feature_mix + marketing_return_boost) * day_coefficients[step_day] * global_macro_scalar * shock_multiplier * horizon_decay
+        compiled_projection_yield.append((step_day, float(step_label_yield)))
         
-    return forecast_timeline_curve
+    return compiled_projection_yield, {
+        "W1_LastWeek": w1, "W2_Rolling7D": w2, "W3_MonthLag": w3,
+        "Active_Day_Coefficient": day_coefficients[day],
+        "Active_Macro_Scalar": global_macro_scalar,
+        "Active_Price_Shock": shock_multiplier
+    }
 
-# ==========================================
-# CENTRAL APPLICATION HEADER
-# ==========================================
-st.markdown("<h1 style='text-align: center; font-weight:900; margin-bottom:0; font-size:40px;'>📊 AI Sales Intelligence Dashboard</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #9ca3af; font-size:15px; margin-bottom:25px;'>Predictive Revenue Patterns, Interactive Scenario Simulation, and Strategy Optimization Management Deck</p>", unsafe_allow_html=True)
+# ==============================================================================
+# MAIN SYSTEM WORKSPACE HEADERS & INTERACTIVE TABS
+# ==============================================================================
+st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
 
-# Main Navigation Workspace Segmentation Layout
-tab_dashboard, tab_glossary = st.tabs(["📊 Live Analytics Control Deck", "📚 System Operations Glossary"])
+# System Command Navigation Ribbon
+tab_core_studio, tab_vector_dictionary = st.tabs([
+    "📊 Enterprise Forecasting Control Center", 
+    "📚 Model Feature & Weight Architecture"
+])
 
-# ==========================================
-# WORKSPACE TAB 1: MAIN INTERACTIVE DASHBOARD
-# ==========================================
-with tab_dashboard:
-    # Sidebar control adjustments configuration column parameters
-    st.sidebar.markdown("### 🕹️ Business Simulator Deck")
-    macro_scenario = st.sidebar.selectbox(
-        "🌐 Simulation Strategy:", 
-        ["Normal Baseline", "Holiday Peak Surge", "Economic Slowdown / Downturn"]
-)
+# ==============================================================================
+# TAB VALUE 1: EXECUTIVE ANALYSIS ENGINE
+# ==============================================================================
+with tab_core_studio:
+    # 🕹️ SIDEBAR INDEPENDENT MODEL FEATURES PANEL
+    st.sidebar.markdown("### 💾 Independent Feature Config Deck")
+    
+    st.sidebar.markdown("**Temporal & Environmental Features:**")
+    target_start_day = st.sidebar.selectbox("📆 Selected Horizon Start Day", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], index=4)
+    macro_environment_feature = st.sidebar.selectbox("🌐 Simulated Market Macro Environment", ["Normal Baseline", "Q4 Peak Holiday Surge", "Market Contraction Recession"])
     
     st.sidebar.markdown("---")
-    selected_day = st.sidebar.selectbox("📆 Forecast Starting Day:", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
-    marketing_spend = st.sidebar.slider("🚀 Advertising Campaign Budget ($):", 0, 20000, 3500, step=500)
-    
-    st.sidebar.markdown("---")
-    competitor_shock = st.sidebar.checkbox("🚨 Competitor Running Price Cuts / Discounts")
+    st.sidebar.markdown("**Strategic Control Features:**")
+    advertising_budget_feature = st.sidebar.slider("🚀 Allocated Campaign Ads Budget ($)", 0, 20000, 4500, step=500)
+    competitor_shock_feature = st.sidebar.checkbox("🚨 Apply Competitor Aggressive Price Cuts / Shock")
 
-    # Grid Container Split Setup: Left Entry Panel, Right Visual Analytics Workspace
-    col_entry, col_canvas = st.columns([1, 2.3])
+    # Main Grid Shell: Left Input Vector Array Block, Right Execution Workspace Canvas
+    left_feature_deck, right_analytics_canvas = st.columns([1.1, 2.4])
 
-    with col_entry:
-        st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
-        st.markdown("### 📝 Input Historical Sales Data")
+    with left_feature_deck:
+        st.markdown("<div class='dashboard-block'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin-top:0; font-weight:700;'>📝 Historical Baseline Features</h3>", unsafe_allow_html=True)
         
-        historical_baseline = st.number_input("💵 Total Sales Last Week ($):", min_value=100, max_value=1000000, value=14500, step=500)
-        rolling_mean_7d = st.number_input("🔄 Average Daily Sales (Past 7 Days) ($):", min_value=100, max_value=1000000, value=13800, step=500)
-        seasonal_lag_30d = st.number_input("📅 Total Sales Last Month ($):", min_value=100, max_value=1000000, value=15200, step=500)
+        # Capture raw continuous business input metrics
+        last_week_sales_feat = st.number_input("💵 Last Week Total Close Sales ($):", min_value=100, max_value=2000000, value=14500, step=500)
+        rolling_7d_mean_feat = st.number_input("🔄 7-Day Rolling Operational Mean ($):", min_value=100, max_value=2000000, value=13800, step=500)
+        month_seasonal_lag_feat = st.number_input("📅 30-Day Cyclical Month Lag ($):", min_value=100, max_value=2000000, value=15200, step=500)
         
-        forecast_btn = st.button("⚡ Run Forecasting Pipeline Loop", use_container_width=True, type="primary")
-        st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Immediate User Insights Helper block
-        st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
-        st.markdown("💡 **Instant Strategy Recommendation:**")
-        if macro_scenario == "Holiday Peak Surge" and not competitor_shock:
-            st.success("🔥 High demand surge detected. Maximize inventory holding counts and raise marketing budgets to capture maximum revenue scales.")
-        elif competitor_shock:
-            st.warning("🚨 Active pricing cuts from competitors flagged. Consider launching micro-promotions or bundling values to defend market share volume.")
-        else:
-            st.info("🟢 Markets are stable. Maintain consistent distribution replenishment schedules and steady optimization pacing loops.")
+        trigger_pipeline_loop = st.button("⚡ Execute Model Inference Loop", use_container_width=True, type="primary")
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Compute models immediately to establish telemetry baseline paths
-    forecast_curve = calculate_horizon_predictions(
-        historical_baseline, rolling_mean_7d, seasonal_lag_30d,
-        selected_day, marketing_spend, macro_scenario, competitor_shock
+    # Compile model arrays instantly to capture active runtime parameters
+    model_output_curve, network_attribution_weights = execute_tensor_forecast_pipeline(
+        last_week_sales_feat, rolling_7d_mean_feat, month_seasonal_lag_feat,
+        target_start_day, advertising_budget_feature, macro_environment_feature, competitor_shock_feature
     )
     
-    # Extract structural calculation primitives safely
-    target_day_name = str(forecast_curve[0][0])
-    target_day_yield = float(forecast_curve[0][1])
-    clean_mean_ref = float(rolling_mean_7d)
+    # Isolate calculated model labels
+    target_day_name_label = model_output_curve[0][0]
+    target_day_yield_label = float(model_output_curve[0][1])
+    baseline_comparison_value = float(rolling_7d_mean_feat)
+    cumulative_7d_horizon_label = sum([val for _, val in model_output_curve])
 
-    # Main Right Workspace Canvas Output Rendering
-    with col_canvas:
-        # 1. CORE FINANCIAL TELEMETRY CARDS ROW
+    # RIGHT COLUMN EXECUTION WORKSPACE
+    with right_analytics_canvas:
+        # 1. THREE-COLUMN METRIC GAUGES DECK
         kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
         
         with kpi_col1:
-            variance_pct = ((target_day_yield - clean_mean_ref) / clean_mean_ref) * 100
-            val_color = "text-neon-green" if variance_pct >= 0 else "text-neon-amber"
+            variance_pct = ((target_day_yield_label - baseline_comparison_value) / baseline_comparison_value) * 100
+            neon_metric_class = "neon-emerald" if variance_pct >= 0 else "neon-amber"
             st.markdown(f"""
-            <div class='kpi-card'>
-                <div class='kpi-title'>Target Day Revenue ({target_day_name})</div>
-                <div class='kpi-value {val_color}'>${target_day_yield:,.2f}</div>
-                <div style='font-size:12px; font-weight:600; color:{"#10b981" if variance_pct >= 0 else "#ef4444"}'>
-                    {"▲" if variance_pct >= 0 else "▼"} {abs(variance_pct):.1f}% vs Average Baseline
+            <div class='kpi-deck-card'>
+                <div class='kpi-card-title'>Target Day Predicted Label ({target_day_name_label})</div>
+                <div class='kpi-card-value {neon_metric_class}'>${target_day_yield_label:,.2f}</div>
+                <div style='font-size:11px; font-weight:600; color:{"#10b981" if variance_pct >= 0 else "#ef4444"}'>
+                    {"▲" if variance_pct >= 0 else "▼"} {abs(variance_pct):.1f}% Variance vs 7D Avg
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
         with kpi_col2:
-            total_week_volume = sum([v for _, v in forecast_curve])
             st.markdown(f"""
-            <div class='kpi-card'>
-                <div class='kpi-title'>Projected 7-Day Cumulative Total</div>
-                <div class='kpi-value text-neon-cyan'>${total_week_volume:,.2f}</div>
-                <div style='font-size:12px; color:#9ca3af;'>Total Expected Rolling Cashflow</div>
+            <div class='kpi-deck-card'>
+                <div class='kpi-card-title'>Cumulative 7-Day Horizon Label</div>
+            value=f"${cumulative_7d_horizon_label:,.2f}"
+        )
+        st.markdown("""
+                <div class='kpi-card-title'>Cumulative 7-Day Horizon Label</div>
+                <div class='kpi-value neon-cyan'>${cumulative_7d_horizon_label:,.2f}</div>
+                <div style='font-size:11px; color:#9ca3af;'>Aggregate Expected Cashflow Volume</div>
             </div>
             """, unsafe_allow_html=True)
             
         with kpi_col3:
-            if macro_scenario == "Holiday Peak Surge" and not competitor_shock:
-                status_badge = "<span class='status-badge badge-surge'>🔥 Peak Volume Surge</span>"
-            elif macro_scenario == "Economic Slowdown / Downturn" or competitor_shock:
-                status_badge = "<span class='status-badge badge-drop'>⚠️ Volatility Risk Warning</span>"
+            # Active status badge logic maps explicitly to risk/opportunity feature flags
+            if macro_environment_feature == "Q4 Peak Holiday Surge" and not competitor_shock_feature:
+                badge_markup = "<span class='pill-badge pill-green'>🔥 Peak Market Expansion</span>"
+            elif macro_environment_feature == "Market Contraction Recession" or competitor_shock_feature:
+                badge_markup = "<span class='pill-badge pill-red'>⚠️ Volatility Risk Matrix</span>"
             else:
-                status_badge = "<span class='status-badge badge-normal'>🟢 Stable Growth Wave</span>"
-            
-        st.markdown(f"""
-        <div class='kpi-card' style='height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;'>
-            <div class='kpi-title' style='margin-bottom:8px;'>Market Status Badge</div>
-            {status_badge}
-        </div>
-        """, unsafe_allow_html=True)
+                badge_markup = "<span class='pill-badge pill-blue'>🟢 Standard Optimization</span>"
+                
+            st.markdown(f"""
+            <div class='kpi-deck-card' style='height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;'>
+                <div class='kpi-card-title' style='margin-bottom:8px;'>Model Operational Status</div>
+                {badge_markup}
+            </div>
+            """, unsafe_allow_html=True)
 
-    # 2. RENDER THE HIGH-PERFORMANCE FUTURE PROJECTION GRAPH
-    st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
-    chart_df = pd.DataFrame(forecast_curve, columns=["Day of Week", "Projected Sales ($)"])
-    
-    # Plotly Express Line Projector handles native rendering smoothly
-    fig_timeline = px.line(
-        chart_df, 
-        x="Day of Week", 
-        y="Projected Sales ($)",
-        title="📈 Expected 7-Day Future Business Revenue Progression Curve",
-        markers=True,
-        text=chart_df["Projected Sales ($)"].apply(lambda x: f"${x/1000:.1f}k")
-    )
-    
-    fig_timeline.update_traces(
-        line=dict(color='#00f5ff', width=3.5),
-        marker=dict(size=8, color='#007aff'),
-        textposition="top center"
-    )
-    
-    fig_timeline.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(family="Inter", size=12, color="#8e8e93"),
-        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
-        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff'), title=None),
-        margin=dict(l=10, r=10, t=50, b=10),
-        height=280
-    )
-    st.plotly_chart(fig_timeline, use_container_width=True)
-
-# ==================== LOWER SECTION SUB-GRID: REVENUE PIE COMPOSITION & AUDIT LOGS ====================
-st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
-sub_col1, sub_col2 = st.columns(2)
-
-with sub_col1:
-    st.markdown("<div class='glass-panel' style='height:100%;'>", unsafe_allow_html=True)
-    st.markdown("### 📊 Revenue Attribution Breakdown")
-    
-    pie_labels = ["Core Structural Baseline Sales", "Marketing Budget Impact Coefficient", "Simulated Scenario Volatility Variance"]
-    pie_values = [float(historical_baseline) * 0.60, float(marketing_spend) * 0.88, abs(target_day_yield - clean_mean_ref)]
-    
-    fig_pie = px.pie(
-        names=pie_labels, values=pie_values,
-        hole=0.4,
-        color_discrete_sequence=["#007aff", "#00f5ff", "#f59e0b"]
-    )
-    fig_pie.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color="#fff",
-        margin=dict(l=10, r=10, t=10, b=10),
-        height=220,
-        showlegend=True
-    )
-    fig_pie.update_traces(textinfo='percent', opacity=0.85)
-    st.plotly_chart(fig_pie, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with sub_col2:
-    st.markdown("<div class='glass-panel' style='height:100%;'>", unsafe_allow_html=True)
-    st.markdown("### 🎞️ Live Session Scenario Performance Tracking Log")
-    
-    # Log active configurations instantly to database dataframes on button press triggers
-    if forecast_btn:
-        st.session_state.history.append({
-            "Time": time.strftime("%I:%M %p"),
-            "Input Sales ($)": int(historical_baseline),
-            "Market Strategy": macro_scenario if not competitor_shock else "🚨 Pricing War Shock",
-            "AI Forecast ($)": round(target_day_yield, 2),
-            "Operational Trend": "🔥 Peak Surge Wave" if target_day_yield > float(historical_baseline) * 1.1 else "🟢 Growth Wave" if target_day_yield >= float(historical_baseline) else "🔴 Contraction Wave"
-        })
+        # 2. EXECUTIVE CORE VISUAL TREND GRAPH
+        st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
+        timeline_dataframe = pd.DataFrame(model_output_curve, columns=["Target Horizon Day", "Predicted Revenue Yield ($)"])
         
-    df_history = pd.DataFrame(st.session_state.history[::-1]) 
-    st.dataframe(df_history, use_container_width=True, height=140)
+        # Dual-Axis/High-Contrast Plotly line engine tracks values across the 7D sequence
+        fig_time_series = px.line(
+            timeline_dataframe, 
+            x="Target Horizon Day", 
+            y="Predicted Revenue Yield ($)",
+            title="🎯 Multi-Horizon Time-Series Predictive Revenue Velocity Curve",
+            markers=True,
+            text=timeline_dataframe["Predicted Revenue Yield ($)"].apply(lambda x: f"${x/1000:.1f}k")
+        )
+        
+        fig_time_series.update_traces(
+            line=dict(color='#00f5ff', width=3.5),
+            marker=dict(size=8, color='#007aff', line=dict(color='#fff', width=1)),
+            textposition="top center"
+        )
+        
+        fig_time_series.update_layout(
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(family="Inter", size=12, color="#8e8e93"),
+            title_font=dict(size=14, color="#ffffff", family="Inter"),
+            xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
+            yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff'), title=None),
+            margin=dict(l=10, r=10, t=50, b=10),
+            height=280
+        )
+        st.plotly_chart(fig_time_series, use_container_width=True)
+
+    # ==============================================================================
+    # STRATEGIC EXECUTIVE DECISION DIRECTIVE ENGINE
+    # ==============================================================================
+    st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
+    lower_grid_col1, lower_grid_col2 = st.columns(2)
+
+    with lower_grid_col1:
+        st.markdown("<div class='dashboard-block' style='height:100%;'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin-top:0; font-weight:700;'>🧠 Automated Strategic Intelligence Agent</h3>", unsafe_allow_html=True)
+        st.write("The agent processed your uploaded features and compiled these prescriptive corporate recommendations:")
+        
+        # Dynamic Marketing Allocation Directive Calculation
+        if advertising_budget_feature >= 8000 and not competitor_shock_feature:
+            st.markdown("""
+            <div class='directive-container directive-market'>
+                <strong>🚀 Premium Marketing Spend Allocation Recommendation:</strong><br>
+                Your high ad spend is highly optimized for the current environment. Focus campaign targets on digital channels and premium keywords to lock down consumer acquisition loops during this high-velocity volume wave.
+            </div>
+            """, unsafe_allow_html=True)
+        elif competitor_shock_feature:
+            st.markdown("""
+            <div class='directive-container directive-risk'>
+                <strong>🚨 Pricing War Combat Counter-Strategy:</strong><br>
+                Active competitor discount shocks are threatening margin profiles. Avoid competing on price cuts alone; instead, launch bundle packs, value-adds, and point-based loyalty programs to defend market volume share without killing margins.
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class='directive-container directive-market'>
+                <strong>📈 Balanced Customer Acquisition Budgeting Strategy:</strong><br>
+                Ad spend is running at conservative baseline rates. Consider increasing the campaign budget by $2,500 to expand outreach and drive more volume into the sales pipeline.
+            </div>
+            """, unsafe_allow_html=True)
+
+        # Dynamic Supply Chain / Inventory Regulations Calculations
+        if target_day_yield_label > baseline_comparison_value * 1.15:
+            st.markdown("""
+            <div class='directive-container directive-supply'>
+                <strong>📦 Mandatory Inventory Holding Expansion Order:</strong><br>
+                The predictive curve identifies a revenue surge wave. Increase safety stock thresholds by 20% across main regional fulfillment centers over the next 48 hours to avoid stockouts and protect fulfillments.
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class='directive-container directive-supply'>
+                <strong>🔄 Lean Distribution Replenishment Regulation:</strong><br>
+                Future demand curves match historical baselines cleanly. Maintain lean inventory configurations to reduce holding costs and protect capital allocations.
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # Immutable Session Audit Database Logs Tracker System Panel
+    with lower_grid_col2:
+        st.markdown("<div class='dashboard-block' style='height:100%;'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin-top:0; font-weight:700;'>🎞️ Enterprise Session Telemetry Audit Log</h3>", unsafe_allow_html=True)
+        st.write("Running list of all active model simulation scenarios compiled during this working container session:")
+        
+        if trigger_pipeline_loop:
+            st.session_state.telemetry_vault.append({
+                "Timestamp": time.strftime("%H:%M:%S"),
+                "Selected Day": target_start_day,
+                "Macro Vector": macro_environment_feature if not competitor_shock_feature else "🚨 Price Shock Wars",
+                "Ad Spend ($)": int(advertising_budget_feature),
+                "Calculated Label ($)": round(target_day_yield_label, 2),
+                "Status": "🔥 Peak Operations" if target_day_yield_label > last_week_sales_feat * 1.1 else "🟢 Growth Wave" if target_day_yield_label >= last_week_sales_feat else "🔴 Volume Compression"
+            })
+            
+        dataframe_audit_vault = pd.DataFrame(st.session_state.telemetry_vault[::-1]) 
+        st.dataframe(dataframe_audit_vault, use_container_width=True, height=145)
+        
+        if st.button("🗑️ Reset Vault Telemetry Databases", use_container_width=True):
+            st.session_state.telemetry_vault = []
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+# ==============================================================================
+# TAB VALUE 2: TRANSPARENT MATHEMATICAL MODEL VECTOR CONFIGURATION DEFINITIONS
+# ==============================================================================
+with tab_vector_dictionary:
+    st.markdown("<div class='dashboard-block'>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin-top:0; font-weight:700;'>📚 Neural Layer Vector & Attribution Dictionary</h3>", unsafe_allow_html=True)
+    st.write("This transparency tab shows exactly how your independent variables (Features) are calculated into target business answers (Labels) inside the model layer:")
     
-    if st.button("🗑️ Clear Dashboard Workspace History Logs", use_container_width=True):
-        st.session_state.history = []
-        st.rerun()
+    col_dict1, col_dict2 = st.columns(2)
+    with col_dict1:
+        st.markdown(f"""
+        **📂 Captured Independent Feature Variables:**
+        - **Last Week Sales Feature:** `${last_week_sales_feat:,}` (Acts as a structural anchor)
+        - **Rolling 7-Day Average Feature:** `${rolling_7d_mean_feat:,}` (Captures current velocity)
+        - **Month Seasonal Lag Feature:** `${month_seasonal_lag_feat:,}` (Captures long-term cycles)
+        - **Temporal Start Day Feature:** `{target_start_day}` (Applies weekly multipliers)
+        - **Marketing Budget Feature:** `${advertising_budget_feature:,}` (Adds linear attribution boosts)
+        - **Macro Environment Feature:** `{macro_environment_feature}` (Applies market scaling filters)
+        - **Competitor Shock Flag Feature:** `{competitor_shock_feature}` (Models pricing war margin reductions)
+        """)
+        
+    with col_dict2:
+        st.markdown(f"""
+        **⚙️ Current Mathematical Attribution Weights:**
+        - **Last Week Attribution Weight (W1):** `{network_attribution_weights['W1_LastWeek']:.2f}`
+        - **Rolling 7-Day Mean Weight (W2):** `{network_attribution_weights['W2_Rolling7D']:.2f}`
+        - **Month Seasonal Lag Weight (W3):** `{network_attribution_weights['W3_MonthLag']:.2f}`
+- Active Day Multiplier Weight: {network_attribution_weights['Active_Day_Coefficient']:.2f}x
+- Active Macro Scalar Weight Filter: {network_attribution_weights['Active_Macro_Scalar']:.2f}x
+- Active Pricing War Suppression Multiplier: {network_attribution_weights['Active_Price_Shock']:.2f}x
+""")
     st.markdown("</div>", unsafe_allow_html=True)
 
-# ==================== WORKSPACE TAB 2: SYSTEM OPERATIONS GLOSSARY ====================
-with tab_glossary:
-    st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
-    st.markdown("### 📚 Understanding Your Analytics Dashboard")
-    st.write("""
-    This section breaks down how the forecasting engine translates raw data entries into strategic business insights:
-    
-    *   **Target Day Revenue Forecast:** This card displays the exact revenue expectation calculated for your starting horizon day, factoring in historical inputs, advertising budget weight, and scenario multipliers.
-    *   **Projected 7-Day Cumulative Total:** The aggregated sum of the complete revenue curve over next week. Useful for cashflow planning, tracking supplier payables, and managing working capital targets.
-    *   **Revenue Attribution Breakdown Pie Chart:** A financial pie chart showing what drove your revenue results. It isolates organic sales from marketing-driven growth, allowing teams to verify the precise ROI of their ad spend.
-    *   **Live Scenario Performance Tracking Log:** An automated running audit trail that saves each simulation run. It lets managers test multiple "what-if" scenarios side-by-side and cross-compare different strategic options.
-    """)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# ==================== FOOTER CLOSING SYSTEM PANEL SIGNATURE ====================
+# ==========================================
+# SYSTEM PANEL RECONCILIATION FOOTER
+# ==========================================
 st.markdown("---")
-st.markdown("<div style='text-align: center; color: #444; font-size: 11px;'>🍿 User-Optimized Decision Infrastructure Engine | Premium Glassmorphic Portfolio System Deployed</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; color: #444; font-size: 11px;'>🍿 Enterprise Decision Infrastructure Engine Ecosystem | Production-Grade Multi-Layer Vector Ensembles Online</div>", unsafe_allow_html=True)
