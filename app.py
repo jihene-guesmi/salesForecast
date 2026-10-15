@@ -45,7 +45,7 @@ st.markdown("""
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20 rgba(0,0,0,0.3);
 }
 
 .kpi-title {
@@ -166,7 +166,6 @@ def calculate_horizon_predictions(hist, roll, lag, start_day, ads, scenario, sho
     return forecast_timeline_curve
 
 # ==========================================
-
 # MAIN INTERFACE RIGHT COLUMN (LIVE INFRASTRUCTURE)
 # ==========================================
 forecast_curve = calculate_horizon_predictions(
@@ -174,7 +173,7 @@ forecast_curve = calculate_horizon_predictions(
     selected_day, marketing_spend, macro_scenario, competitor_shock
 )
 
-# FIX: Unpack the tuple list elements accurately to extract scalar metrics from strings
+# Unpack baseline elements from the multi-horizon timeline list explicitly
 target_day_name = forecast_curve[0][0]
 target_day_yield = float(forecast_curve[0][1])
 
@@ -220,7 +219,7 @@ with col_dashboard:
         </div>
         """, unsafe_allow_html=True)
 
-        # 2. THE MAIN 7-DAY FUTURE PROJECTION CURVE
+    # 2. THE MAIN 7-DAY FUTURE PROJECTION CURVE
     st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
     days_axis = [d for d, _ in forecast_curve]
     yields_axis = [v for _, v in forecast_curve]
@@ -228,8 +227,7 @@ with col_dashboard:
     fig_timeline = go.Figure()
     
     fig_timeline.add_trace(go.Scatter(
-        x=days_axis, 
-        y=yields_axis,
+        x=days_axis, y=yields_axis,
         mode='lines+markers+text',
         name='AI Sales Forecast',
         text=[f"${val/1000:.1f}k" for val in yields_axis],
@@ -241,30 +239,27 @@ with col_dashboard:
     ))
     
     fig_timeline.add_trace(go.Scatter(
-        x=days_axis, 
-        y=[float(rolling_mean_7d)] * 7,
-        mode='lines',
-        name='Historical Daily Average',
-        line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
-    ))
-    
-    # FIXED: Replaced title dictionary configurations with flattened, direct keyword properties
-    fig_timeline.update_layout(
-        title="📈 Expected Future 7-Day Revenue Progression Curve",
-        title_font_size=14,
-        title_font_color="#ffffff",
-        title_font_family="Inter",
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color="#8e8e93",
-        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
-        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
-        margin=dict(l=10, r=10, t=45, b=10),
-        height=290,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-    st.plotly_chart(fig_timeline, selection_mode="disabled")
-
+            x=days_axis, y=[rolling_mean_7d]*7,
+            mode='lines',
+            name='Historical Daily Average',
+            line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
+        ))
+        
+        fig_timeline.update_layout(
+            title="📈 Expected Future 7-Day Revenue Progression Curve",
+            title_font_size=14,
+            title_font_color="#ffffff",
+            title_font_family="Inter",
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font_color="#8e8e93",
+            xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
+            yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
+            margin=dict(l=10, r=10, t=45, b=10),
+            height=290,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig_timeline, selection_mode="disabled")
 
 # ==================== LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY) ====================
 st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
@@ -298,7 +293,6 @@ with sub_col2:
     st.markdown("<div class='glass-panel' style='height:100%;'>", unsafe_allow_html=True)
     st.markdown("### 🎞️ Live Session Scenario Tracker Log")
     
-    # Auto-save current configuration history run logs
     if forecast_btn:
         st.session_state.history.append({
             "Time": time.strftime("%I:%M %p"),
