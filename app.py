@@ -240,7 +240,7 @@ with col_dashboard:
     
     name='Historical Daily Average',
     line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
-    ))
+        ))
         
         fig_timeline.update_layout(
             title="📈 Expected Future 7-Day Revenue Progression Curve",
