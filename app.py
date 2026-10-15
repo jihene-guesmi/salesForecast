@@ -257,8 +257,6 @@ st.plotly_chart(fig_timeline, width='stretch')
 
 
 
-LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY)
-
 
 
 st.markdown("", unsafe_allow_html=True)
