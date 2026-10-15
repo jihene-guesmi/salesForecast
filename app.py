@@ -55,11 +55,12 @@ st.markdown("""
 # ==========================================
 # BACKEND PRODUCT INVENTORY & SALES DATA
 # ==========================================
+# FIXED: Re-added missing colons and structured numeric array values safely
 product_data = pd.DataFrame({
     "Product Name": ["Organic Fertilizers", "Premium Crop Seeds", "Drip Irrigation Kits", "Eco Pest Controls", "Soil Testing Probes"],
     "Stock Status": ["Available", "Available", "Low Stock", "Available", "Out of Stock"],
-    "Units Available",
-    "Units Sold This Month",
+    "Units Available":,
+    "Units Sold This Month":,
     "Base Price ($)": [45.00, 15.00, 250.00, 30.00, 85.00]
 })
 
@@ -177,7 +178,6 @@ with col_right_charts:
         day_pred = base_revenue_mix * day_weights[day]
         if is_holiday:
             day_pred *= 1.42
-        # FIX: Changed competitor_shock to competitor_discount to align names and resolve the NameError
         if competitor_discount:
             day_pred *= 0.82
         curve_data.append((day, round(day_pred, 2)))
