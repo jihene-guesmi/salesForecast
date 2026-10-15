@@ -58,8 +58,8 @@ st.markdown("""
 product_data = pd.DataFrame({
     "Product Name": ["Organic Fertilizers", "Premium Crop Seeds", "Drip Irrigation Kits", "Eco Pest Controls", "Soil Testing Probes"],
     "Stock Status": ["Available", "Available", "Low Stock", "Available", "Out of Stock"],
-    "Units Available":,
-    "Units Sold This Month":,
+    "Units Available",
+    "Units Sold This Month",
     "Base Price ($)": [45.00, 15.00, 250.00, 30.00, 85.00]
 })
 
