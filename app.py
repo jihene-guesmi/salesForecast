@@ -254,7 +254,7 @@ with col_dashboard:
             height=290,
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
-        st.plotly_chart(fig_timeline, width='stretch')
+     st.plotly_chart(fig_timeline, width='stretch')
 
 # ==================== LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY) ====================
 st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
