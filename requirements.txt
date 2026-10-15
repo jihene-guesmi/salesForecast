@@ -1,6 +1,4 @@
-fastapi
-uvicorn
-pandas
+streamlit
 numpy
-scikit-learn
-joblib
+pandas
+plotly
