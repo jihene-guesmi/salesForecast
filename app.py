@@ -209,7 +209,7 @@ with tab_core_studio:
             </div>
             """, unsafe_allow_html=True)
             
-       with kpi_col2:
+        with kpi_col2:
             st.markdown(f"""
             <div class='kpi-deck-card'>
                 <div class='kpi-card-title'>Cumulative 7-Day Horizon Label</div>
