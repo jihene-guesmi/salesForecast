@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom Light & Clean CSS Styling
+# Custom Light & Clean UX Theme Styling
 st.markdown("""
 <style>
 @import url('https://googleapis.com');
@@ -55,16 +55,15 @@ st.markdown("""
 # ==========================================
 # BACKEND PRODUCT INVENTORY & SALES DATA
 # ==========================================
-# This acts as your local backend database
 product_data = pd.DataFrame({
     "Product Name": ["Organic Fertilizers", "Premium Crop Seeds", "Drip Irrigation Kits", "Eco Pest Controls", "Soil Testing Probes"],
     "Stock Status": ["Available", "Available", "Low Stock", "Available", "Out of Stock"],
-    "Units Available": [450, 1200, 15, 310, 0],
-    "Units Sold This Month": [120, 840, 95, 210, 45],
+    "Units Available":,
+    "Units Sold This Month":,
     "Base Price ($)": [45.00, 15.00, 250.00, 30.00, 85.00]
 })
 
-# Sort to isolate the most sold product dynamically
+# Isolate the top-performing product row
 most_sold_product = product_data.sort_values(by="Units Sold This Month", ascending=False).iloc[0]
 
 # ==========================================
@@ -73,7 +72,7 @@ most_sold_product = product_data.sort_values(by="Units Sold This Month", ascendi
 st.markdown("<h1 style='color: #0f172a; font-weight: 800; margin-bottom: 0;'>🛍️ Retail Sales & AI Prediction Studio</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color: #64748b; font-size: 15px; margin-bottom: 25px;'>Monitor live inventory availability, track top-selling products, and run predictive sales modeling templates.</p>", unsafe_allow_html=True)
 
-# Top Telemetry Highlight KPI Cards Rows
+# Top Highlights Row (KPI Scorecards)
 kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
 
 with kpi_col1:
@@ -116,49 +115,48 @@ with col_left_inputs:
     st.markdown("<h3 style='margin-top:0; color: #0f172a;'>⚙️ Configure Model Prediction Features</h3>", unsafe_allow_html=True)
     st.write("Select the necessary features used to train your regression notebooks to simulate future revenue labels:")
     
-    # 1. Select Target Product Group Feature
+    # 1. Product Selection Feature
     selected_prod = st.selectbox("📦 Target Product Focus:", product_data["Product Name"])
     prod_row = product_data[product_data["Product Name"] == selected_prod].iloc[0]
     
-    # 2. Select Temporal Day Feature
+    # 2. Seasonality Feature
     target_day = st.selectbox("📆 Forecast Target Day:", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], index=4)
     
-    # 3. Select Operational Strategy Features
+    # 3. Strategy Features
     marketing_budget = st.slider("🚀 Advertising Campaign Spend ($):", 0, 15000, 2500, step=500)
     is_holiday = st.checkbox("🎉 Target Horizon is a National Holiday")
-    competitor_discount = st.checkbox("🚨 Competitors Running Price Cuts / Discounts")
+    competitor_discount = st.checkbox("🚨 Competitor Running Discounts / Price Cuts")
     
     forecast_btn = st.button("⚡ Run Sales Model Inference", use_container_width=True, type="primary")
     st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# BACKEND ALGEBRAIC PREDICTION MODEL SCALARS
+# MODEL PREDICTION MATH COEFFICIENTS
 # ==========================================
-# Day seasonality parameters matching model configurations
 day_weights = {"Monday": 0.92, "Tuesday": 0.96, "Wednesday": 1.02, "Thursday": 1.05, "Friday": 1.22, "Saturday": 1.28, "Sunday": 0.85}
 
-# Compute baseline calculation using product parameters and marketing boost features
+# Compute base revenue prediction layer
 base_revenue_mix = (prod_row["Base Price ($)"] * prod_row["Units Sold This Month"] * 0.35) + (float(marketing_budget) * 0.88)
 calculated_prediction_label = base_revenue_mix * day_weights[target_day]
 
-# Apply environmental scenario multipliers
+# Apply environmental features
 if is_holiday:
     calculated_prediction_label *= 1.42
 if competitor_discount:
     calculated_prediction_label *= 0.82
 
-# RIGHT COLUMN: VISUAL DASHBOARD CHARTS (LIGHT & CLEAN COLORS)
+# RIGHT COLUMN: VISUAL DASHBOARD CHARTS
 with col_right_charts:
     st.markdown("<div class='light-card'>", unsafe_allow_html=True)
     st.markdown(f"<h3 style='margin-top:0; color: #0f172a;'>🎯 Predicted AI Sales Label for {selected_prod}</h3>", unsafe_allow_html=True)
     
-    # Large readable prediction metric block
+    # Render final calculated model label
     st.metric(
         label=f"Expected Single-Day Revenue Velocity on {target_day}", 
         value=f"${calculated_prediction_label:,.2f}"
     )
     
-    # Strategic Action Directives Engine
+    # Strategic Prescriptive Advisory Blocks
     st.markdown("---")
     st.markdown("📋 **Strategic Advisory Action Plan:**")
     if is_holiday and not competitor_discount:
@@ -169,7 +167,7 @@ with col_right_charts:
         st.info("Market conditions remain stable. Maintain lean inventory replacement protocols and keep standard campaign pacing loops steady.")
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # 7-DAY sales VISUALIZATION TREND LINE
+    # 7-DAY VISUALIZATION TREND LINE
     st.markdown("<div class='light-card'>", unsafe_allow_html=True)
     st.markdown("<h4 style='margin-top:0; color: #0f172a;'>📈 7-Day Rolling Revenue Progression Horizon</h4>", unsafe_allow_html=True)
     
@@ -179,19 +177,19 @@ with col_right_charts:
         day_pred = base_revenue_mix * day_weights[day]
         if is_holiday:
             day_pred *= 1.42
-        if competitor_shock:
+        # FIX: Changed competitor_shock to competitor_discount to align names and resolve the NameError
+        if competitor_discount:
             day_pred *= 0.82
         curve_data.append((day, round(day_pred, 2)))
         
     chart_df = pd.DataFrame(curve_data, columns=["Day of Week", "Predicted Revenue ($)"])
     
-    # Generate clean, light-colored graph layout parameters
     fig_line = px.line(
         chart_df, 
         x="Day of Week", 
         y="Predicted Revenue ($)", 
         markers=True,
-        color_discrete_sequence=["#2563eb"]  # Clean corporate royal blue line
+        color_discrete_sequence=["#2563eb"]
     )
     
     fig_line.update_layout(
@@ -211,7 +209,6 @@ st.markdown("<div class='light-card'>", unsafe_allow_html=True)
 st.markdown("<h3 style='margin-top:0; color: #0f172a;'>📊 Real-Time Backend Inventory Matrix</h3>", unsafe_allow_html=True)
 st.write("Current snapshot values loaded from your active database tracking system script:")
 
-# Style data frame formatting for easy business overview scanning
 st.dataframe(
     product_data.style.format({"Base Price ($)": "${:.2f}"}),
     use_container_width=True,
