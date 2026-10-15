@@ -55,7 +55,7 @@ st.markdown("""
 # ==========================================
 # BACKEND PRODUCT INVENTORY & SALES DATA
 # ==========================================
-# FIXED: Re-added missing colons and structured numeric array values safely
+# FIXED: Filled list keys with mock data metrics matching standard farming supply profiles
 product_data = pd.DataFrame({
     "Product Name": ["Organic Fertilizers", "Premium Crop Seeds", "Drip Irrigation Kits", "Eco Pest Controls", "Soil Testing Probes"],
     "Stock Status": ["Available", "Available", "Low Stock", "Available", "Out of Stock"],
@@ -64,7 +64,7 @@ product_data = pd.DataFrame({
     "Base Price ($)": [45.00, 15.00, 250.00, 30.00, 85.00]
 })
 
-# Isolate the top-performing product row
+# Isolate the top-performing product row based on quantities sold
 most_sold_product = product_data.sort_values(by="Units Sold This Month", ascending=False).iloc[0]
 
 # ==========================================
