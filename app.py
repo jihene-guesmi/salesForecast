@@ -173,7 +173,7 @@ forecast_curve = calculate_horizon_predictions(
     selected_day, marketing_spend, macro_scenario, competitor_shock
 )
 
-# FIX: Unpack the tuple list elements accurately to extract scalar metrics from strings
+# Unpack baseline elements from the multi-horizon timeline list
 target_day_name = forecast_curve[0][0]
 target_day_yield = float(forecast_curve[0][1])
 
@@ -225,6 +225,7 @@ with col_dashboard:
     yields_axis = [v for _, v in forecast_curve]
     
     fig_timeline = go.Figure()
+    
     fig_timeline.add_trace(go.Scatter(
         x=days_axis, y=yields_axis,
         mode='lines+markers+text',
@@ -237,8 +238,11 @@ with col_dashboard:
         fillcolor='rgba(0, 245, 255, 0.02)'
     ))
     
-    name='Historical Daily Average',
-    line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
+    fig_timeline.add_trace(go.Scatter(
+            x=days_axis, y=[rolling_mean_7d]*7,
+            mode='lines',
+            name='Historical Daily Average',
+            line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
         ))
         
         fig_timeline.update_layout(
