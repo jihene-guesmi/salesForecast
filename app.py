@@ -238,8 +238,8 @@ with col_dashboard:
         fillcolor='rgba(0, 245, 255, 0.02)'
     ))
     
-        name='Historical Daily Average',
-        line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
+    name='Historical Daily Average',
+    line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
     ))
         
         fig_timeline.update_layout(
