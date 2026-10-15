@@ -239,27 +239,29 @@ with col_dashboard:
     ))
     
     fig_timeline.add_trace(go.Scatter(
-            x=days_axis, y=[rolling_mean_7d]*7,
-            mode='lines',
-            name='Historical Daily Average',
-            line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
-        ))
-        
+        x=days_axis, y=[rolling_mean_7d]*7,
+        mode='lines',
+        name='Historical Daily Average',
+        line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
+    ))
+    
+    # FIXED: Grouped all typography parameters inside Plotly's official native 'title' dictionary format
     fig_timeline.update_layout(
-            title="📈 Expected Future 7-Day Revenue Progression Curve",
-            title_font_size=14,
-            title_font_color="#ffffff",
-            title_font_family="Inter",
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font_color="#8e8e93",
-            xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
-            yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
-            margin=dict(l=10, r=10, t=45, b=10),
-            height=290,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
-st.plotly_chart(fig_timeline, selection_mode="disabled")
+        title={
+            'text': "📈 Expected Future 7-Day Revenue Progression Curve",
+            'font': {'size': 14, 'color': '#ffffff', 'family': 'Inter'}
+        },
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font_color="#8e8e93",
+        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
+        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
+        margin=dict(l=10, r=10, t=45, b=10),
+        height=290,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    st.plotly_chart(fig_timeline, width='stretch')
+
 
 # ==================== LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY) ====================
 st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
