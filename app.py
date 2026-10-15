@@ -304,13 +304,6 @@ st.session_state.history = []
 st.rerun()
 st.markdown("", unsafe_allow_html=True)
 
-==========================================
-
-
-FOOTER CLOSING SIGNATURE
-
-
-==========================================
 
 st.markdown("---")
 st.markdown("🍿 User-Optimized Decision Infrastructure Engine | Glassmorphic Portfolio System Deployed", unsafe_allow_html=True)
