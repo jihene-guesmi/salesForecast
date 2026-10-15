@@ -245,7 +245,7 @@ with col_dashboard:
             line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
         ))
         
-        fig_timeline.update_layout(
+     fig_timeline.update_layout(
             title="📈 Expected Future 7-Day Revenue Progression Curve",
             title_font_size=14,
             title_font_color="#ffffff",
