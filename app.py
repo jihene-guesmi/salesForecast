@@ -45,7 +45,7 @@ st.markdown("""
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     text-align: center;
-    box-shadow: 0 4px 20 rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .kpi-title {
@@ -238,30 +238,22 @@ with col_dashboard:
         fillcolor='rgba(0, 245, 255, 0.02)'
     ))
     
-    fig_timeline.add_trace(go.Scatter(
-        x=days_axis, y=[rolling_mean_7d]*7,
-        mode='lines',
-        name='Historical Daily Average',
-        line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
-    ))
-    
-    # FIXED: Grouped all typography parameters inside Plotly's official native 'title' dictionary format
-    fig_timeline.update_layout(
-        title={
-            'text': "📈 Expected Future 7-Day Revenue Progression Curve",
-            'font': {'size': 14, 'color': '#ffffff', 'family': 'Inter'}
-        },
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color="#8e8e93",
-        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
-        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
-        margin=dict(l=10, r=10, t=45, b=10),
-        height=290,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-    st.plotly_chart(fig_timeline, width='stretch')
-
+            name='Historical Daily Average',
+            line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
+        ))
+        
+        fig_timeline.update_layout(
+            title="📈 Expected Future 7-Day Revenue Progression Curve",
+            font=dict(family="Inter", size=12, color="#8e8e93"),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
+            yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11, color='#fff')),
+            margin=dict(l=10, r=10, t=60, b=10),
+            height=290,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig_timeline, use_container_width=True)
 
 # ==================== LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY) ====================
 st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
@@ -288,7 +280,7 @@ with sub_col1:
         showlegend=True
     )
     fig_pie.update_traces(textinfo='percent', opacity=0.85)
-    st.plotly_chart(fig_pie, width='stretch')
+    st.plotly_chart(fig_pie, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 with sub_col2:
@@ -305,7 +297,7 @@ with sub_col2:
         })
         
     df_history = pd.DataFrame(st.session_state.history[::-1]) 
-    st.dataframe(df_history, width='stretch', height=140)
+    st.dataframe(df_history, use_container_width=True, height=140)
     
     if st.button("🗑️ Clear Dashboard Run Logs", use_container_width=True):
         st.session_state.history = []
