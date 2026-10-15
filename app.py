@@ -216,9 +216,9 @@ with tab_core_studio:
             value=f"${cumulative_7d_horizon_label:,.2f}"
         )
         st.markdown("""
-                <div class='kpi-card-title'>Cumulative 7-Day Horizon Label</div>
-                <div class='kpi-value neon-cyan'>${cumulative_7d_horizon_label:,.2f}</div>
-                <div style='font-size:11px; color:#9ca3af;'>Aggregate Expected Cashflow Volume</div>
+            <div class='kpi-card-title'>Cumulative 7-Day Horizon Label</div>
+            <div class='kpi-value neon-cyan'>${cumulative_7d_horizon_label:,.2f}</div>
+            <div style='font-size:11px; color:#9ca3af;'>Aggregate Expected Cashflow Volume</div>
             </div>
             """, unsafe_allow_html=True)
             
