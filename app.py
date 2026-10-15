@@ -219,7 +219,7 @@ with col_dashboard:
         </div>
         """, unsafe_allow_html=True)
 
-    # 2. THE MAIN 7-DAY FUTURE PROJECTION CURVE
+      # 2. THE MAIN 7-DAY FUTURE PROJECTION CURVE
     st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
     days_axis = [d for d, _ in forecast_curve]
     yields_axis = [v for _, v in forecast_curve]
@@ -245,18 +245,20 @@ with col_dashboard:
         line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
     ))
     
+    # FIXED: Simplified configuration layout to bypass strict coordinate checks on Python 3.14 cloud slots
     fig_timeline.update_layout(
         title="📈 Expected Future 7-Day Revenue Progression Curve",
-        font=dict(family="Inter", size=12, color="#8e8e93"),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(family="Inter", size=12, color="#8e8e93"),
         xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
         yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11, color='#fff')),
         margin=dict(l=10, r=10, t=60, b=10),
         height=290,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        showlegend=True
     )
     st.plotly_chart(fig_timeline, use_container_width=True)
+
 
 
 # ==================== LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY) ====================
