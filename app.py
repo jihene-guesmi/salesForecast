@@ -173,8 +173,9 @@ forecast_curve = calculate_horizon_predictions(
     selected_day, marketing_spend, macro_scenario, competitor_shock
 )
 
+# FIX: Unpack the tuple list elements accurately to extract scalar metrics from strings
 target_day_name = forecast_curve[0][0]
-target_day_yield = forecast_curve[0][1]
+target_day_yield = float(forecast_curve[0][1])
 
 with col_dashboard:
     # 1. LIVE HIGHLIGHT KPI SCORECARD ROW
@@ -235,77 +236,81 @@ with col_dashboard:
         fill='tozeroy',
         fillcolor='rgba(0, 245, 255, 0.02)'
     ))
-    
-    fig_timeline.add_trace(go.Scatter(
-        x=days_axis, y=[rolling_mean_7d]*7,
-        mode='lines',
-            name='Historical Daily Average',
-            line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
-        ))
-        
-    fig_timeline.update_layout(
-            title=dict(text="📈 Expected Future 7-Day Revenue Progression Curve", font=dict(size=14, color="#fff", family="Inter")),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font_color="#8e8e93",
-            xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
-            yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
-            margin=dict(l=10, r=10, t=45, b=10),
-            height=290,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
-    st.plotly_chart(fig_timeline, width='stretch')
+    ig_timeline.add_trace(go.Scatter(
+x=days_axis, y=[rolling_mean_7d]*7,
+mode='lines',
+name='Historical Daily Average',
+line=dict(color='rgba(255,255,255,0.2)', width=2, dash='dash')
+))
+fig_timeline.update_layout(
+title=dict(text="📈 Expected Future 7-Day Revenue Progression Curve", font=dict(size=14, color="#fff", family="Inter")),
+paper_bgcolor='rgba(0,0,0,0)',
+plot_bgcolor='rgba(0,0,0,0)',
+font_color="#8e8e93",
+xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', tickfont=dict(color='#fff')),
+yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.03)', title="Projected Sales Volume ($)", titlefont=dict(size=11)),
+margin=dict(l=10, r=10, t=45, b=10),
+height=290,
+legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+)
+st.plotly_chart(fig_timeline, width='stretch')
 
-# ==================== LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY) ====================
-st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
+==========================================
+
+
+LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY)
+
+
+==========================================
+
+st.markdown("", unsafe_allow_html=True)
 sub_col1, sub_col2 = st.columns(2)
-
 with sub_col1:
-    st.markdown("<div class='glass-panel' style='height:100%;'>", unsafe_allow_html=True)
-    st.markdown("### 📊 Revenue Generation Breakdown")
-    
-    pie_labels = ["Core Structural Baseline Sales", "Marketing Budget Impact", "Market Conditions Variance"]
-    pie_values = [historical_baseline * 0.6, marketing_spend * 0.88, abs(target_day_yield - rolling_mean_7d)]
-    
-    fig_pie = px.pie(
-        names=pie_labels, values=pie_values,
-        hole=0.4,
-        color_discrete_sequence=["#007aff", "#00f5ff", "#f59e0b"]
-    )
-    fig_pie.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color="#fff",
-        margin=dict(l=10, r=10, t=10, b=10),
-        height=220,
-        showlegend=True
-    )
-    fig_pie.update_traces(textinfo='percent', opacity=0.85)
-    st.plotly_chart(fig_pie, width='stretch')
-    st.markdown("</div>", unsafe_allow_html=True)
-
+st.markdown("", unsafe_allow_html=True)
+st.markdown("### 📊 Revenue Generation Breakdown")
+pie_labels = ["Core Structural Baseline Sales", "Marketing Budget Impact", "Market Conditions Variance"]
+pie_values = [historical_baseline * 0.6, marketing_spend * 0.88, abs(target_day_yield - rolling_mean_7d)]
+fig_pie = px.pie(
+names=pie_labels, values=pie_values,
+hole=0.4,
+color_discrete_sequence=["#007aff", "#00f5ff", "#f59e0b"]
+)
+fig_pie.update_layout(
+paper_bgcolor='rgba(0,0,0,0)',
+plot_bgcolor='rgba(0,0,0,0)',
+font_color="#fff",
+margin=dict(l=10, r=10, t=10, b=10),
+height=220,
+showlegend=True
+)
+fig_pie.update_traces(textinfo='percent', opacity=0.85)
+st.plotly_chart(fig_pie, width='stretch')
+st.markdown("", unsafe_allow_html=True)
 with sub_col2:
-    st.markdown("<div class='glass-panel' style='height:100%;'>", unsafe_allow_html=True)
-    st.markdown("### 🎞️ Live Session Scenario Tracker Log")
-    
-    # Auto-save current configuration history run logs
-    if forecast_btn:
-        st.session_state.history.append({
-            "Time": time.strftime("%I:%M %p"),
-            "Input Sales ($)": int(historical_baseline),
-            "Market Condition": macro_scenario if not competitor_shock else "🚨 Competitor Price Cut",
-            "AI Forecast ($)": round(target_day_yield, 2),
-            "Trend": "🔥 Peak Surge" if target_day_yield > historical_baseline * 1.1 else "🟢 Growth" if target_day_yield >= historical_baseline else "🔴 Contraction"
-        })
-        
-    df_history = pd.DataFrame(st.session_state.history[::-1]) 
-    st.dataframe(df_history, width='stretch', height=140)
-    
-    if st.button("🗑️ Clear Dashboard Run Logs", use_container_width=True):
-        st.session_state.history = []
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("", unsafe_allow_html=True)
+st.markdown("### 🎞️ Live Session Scenario Tracker Log")
+if forecast_btn:
+st.session_state.history.append({
+"Time": time.strftime("%I:%M %p"),
+"Input Sales ($)": int(historical_baseline),
+"Market Condition": macro_scenario if not competitor_shock else "🚨 Competitor Price Cut",
+"AI Forecast ($)": round(target_day_yield, 2),
+"Trend": "🔥 Peak Surge" if target_day_yield > historical_baseline * 1.1 else "🟢 Growth" if target_day_yield >= historical_baseline else "🔴 Contraction"
+})
+df_history = pd.DataFrame(st.session_state.history[::-1])
+st.dataframe(df_history, width='stretch', height=140)
+if st.button("🗑️ Clear Dashboard Run Logs", use_container_width=True):
+st.session_state.history = []
+st.rerun()
+st.markdown("", unsafe_allow_html=True)
 
-# ==================== FOOTER CLOSING SIGNATURE ====================
+==========================================
+
+
+FOOTER CLOSING SIGNATURE
+
+
+==========================================
+
 st.markdown("---")
-st.markdown("<div style='text-align: center; color: #444; font-size: 11px;'>🍿 User-Optimized Decision Infrastructure Engine | Glassmorphic Portfolio System Deployed</div>", unsafe_allow_html=True)
+st.markdown("🍿 User-Optimized Decision Infrastructure Engine | Glassmorphic Portfolio System Deployed", unsafe_allow_html=True)
