@@ -255,13 +255,11 @@ legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
 )
 st.plotly_chart(fig_timeline, width='stretch')
 
-==========================================
 
 
 LOWER SUB-GRID PANELS (COMPOSITION & AUDIT HISTORY)
 
 
-==========================================
 
 st.markdown("", unsafe_allow_html=True)
 sub_col1, sub_col2 = st.columns(2)
