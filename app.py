@@ -217,7 +217,7 @@ with tab_dashboard:
                 status_badge = "<span class='status-badge badge-surge'>🔥 Peak Volume Surge</span>"
             elif macro_scenario == "Economic Slowdown / Downturn" or competitor_shock:
                 status_badge = "<span class='status-badge badge-drop'>⚠️ Volatility Risk Warning</span>"
-        else:
+            else:
                 status_badge = "<span class='status-badge badge-normal'>🟢 Stable Growth Wave</span>"
             
         st.markdown(f"""
