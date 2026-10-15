@@ -215,7 +215,7 @@ with tab_dashboard:
         with kpi_col3:
             if macro_scenario == "Holiday Peak Surge" and not competitor_shock:
                 status_badge = "<span class='status-badge badge-surge'>🔥 Peak Volume Surge</span>"
-            elif macro_scenario == "Economic Slowdown / Downturn" or competitor_shock:
+        elif macro_scenario == "Economic Slowdown / Downturn" or competitor_shock:
             status_badge = "<span class='status-badge badge-drop'>⚠️ Volatility Risk Warning</span>"
         else:
             status_badge = "<span class='status-badge badge-normal'>🟢 Stable Growth Wave</span>"
