@@ -166,6 +166,7 @@ def calculate_horizon_predictions(hist, roll, lag, start_day, ads, scenario, sho
     return forecast_timeline_curve
 
 # ==========================================
+
 # MAIN INTERFACE RIGHT COLUMN (LIVE INFRASTRUCTURE)
 # ==========================================
 forecast_curve = calculate_horizon_predictions(
@@ -173,7 +174,7 @@ forecast_curve = calculate_horizon_predictions(
     selected_day, marketing_spend, macro_scenario, competitor_shock
 )
 
-# Unpack baseline elements from the multi-horizon timeline list
+# FIX: Unpack the tuple list elements accurately to extract scalar metrics from strings
 target_day_name = forecast_curve[0][0]
 target_day_yield = float(forecast_curve[0][1])
 
